@@ -4,7 +4,7 @@
     "description": "Sam e-core security bundle",
     "keywords": ["sam", "security"],
     "homepage": "https://github.com/CanalTP/SamEcoreSecurityManagerBundle",
-    "license": "AGPLv3",
+    "license": "AGPL-3.0",
     "authors": [
         {
             "name": "Rémy Abi-Khalil",

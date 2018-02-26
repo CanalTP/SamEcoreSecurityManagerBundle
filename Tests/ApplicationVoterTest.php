@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Tests\Authorization\Voter\RoleVoterTest;
 use CanalTP\SamEcoreSecurityBundle\Security\Authorization\Voter\ApplicationVoter;
 
-class ApllicationVoterTest extends RoleVoterTest
+class ApplicationVoterTest extends RoleVoterTest
 {
     /**
      * @dataProvider getVoteTests

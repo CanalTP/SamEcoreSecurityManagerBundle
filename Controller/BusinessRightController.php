@@ -5,6 +5,7 @@ namespace CanalTP\SamEcoreSecurityBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use CanalTP\SamEcoreSecurityBundle\Form\Type\Permission\ApplicationRoleType;
+use CanalTP\SamEcoreSecurityBundle\Form\Type\Permission\BusinessRightType;
 
 class BusinessRightController extends Controller
 {
@@ -29,7 +30,7 @@ class BusinessRightController extends Controller
     private function buildForm($application)
     {
         $form = $this->createForm(
-            new ApplicationRoleType(),
+            ApplicationRoleType::class,
             $application,
             array(
                 'action' => $this->generateUrl(
@@ -51,7 +52,7 @@ class BusinessRightController extends Controller
         $em = $this->getDoctrine()->getManager();
         $application = $em->getRepository('CanalTPSamCoreBundle:Application')
             ->findWithEditableRoles($appId);
-        
+
         if (!$application) {
             throw new LogicException(sprintf("Application with id (%d) not found", $appId));
         }
@@ -62,7 +63,7 @@ class BusinessRightController extends Controller
         if ($render) {
             $form = $this->buildForm($application);
         }
-        
+
         return $this->render(
             'CanalTPSamEcoreSecurityBundle:BusinessRight:edit.html.twig',
             array(

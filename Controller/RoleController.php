@@ -7,6 +7,9 @@ use CanalTP\SamCoreBundle\Controller\AbstractController;
 
 use CanalTP\SamCoreBundle\Entity\Role;
 use CanalTP\SamEcoreSecurityBundle\Form\Model\RegistrationRole;
+use CanalTP\SamEcoreSecurityBundle\Form\Type\Role\CreateRoleType;
+use CanalTP\SamEcoreSecurityBundle\Form\Type\Role\RoleType;
+
 
 /**
  * Role controller.
@@ -41,7 +44,7 @@ class RoleController extends AbstractController
     */
     private function createCreateForm(RegistrationRole $entity)
     {
-        $form = $this->createForm('sam_create_role', $entity, array(
+        $form = $this->createForm(CreateRoleType::class, $entity, array(
             'action' => $this->generateUrl('sam_role_create'),
             'method' => 'POST'
         ));
@@ -140,7 +143,7 @@ class RoleController extends AbstractController
     */
     private function createEditForm(Role $entity)
     {
-        $form = $this->createForm('sam_role', $entity, array(
+        $form = $this->createForm(RoleType::class, $entity, array(
             'action' => $this->generateUrl('sam_role_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));

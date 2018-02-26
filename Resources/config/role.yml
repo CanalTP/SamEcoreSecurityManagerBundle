@@ -1,30 +1,19 @@
-parameters:
-    sam_create_role.type.class: CanalTP\SamEcoreSecurityBundle\Form\Type\Role\CreateRoleType
-    sam_role.type.class: CanalTP\SamEcoreSecurityBundle\Form\Type\Role\RoleType
-    sam_create_role_listener.class: CanalTP\SamEcoreSecurityBundle\Form\EventListener\CreateRoleListener
-    sam_copy_role_by_application.type.class: CanalTP\SamEcoreSecurityBundle\Form\Type\Role\CopyRoleByApplicationType
-
 services:
     sam_create_role.type:
-        class: %sam_create_role.type.class%
+        class: "CanalTP\SamEcoreSecurityBundle\Form\Type\Role\CreateRoleType"
         arguments:
            - '@sam_create_role_listener'
         tags:
-            - { name: form.type, alias: sam_create_role }
-
-    sam_role.type:
-        class: %sam_role.type.class%
-        tags:
-            - { name: form.type, alias: sam_role }
+            - { name: form.type }
 
     sam_create_role_listener:
-        class: %sam_create_role_listener.class%
+        class: "CanalTP\SamEcoreSecurityBundle\Form\EventListener\CreateRoleListener"
         arguments:
            - '@doctrine.orm.entity_manager'
 
     sam_copy_role_by_application.type:
-        class: %sam_copy_role_by_application.type.class%
+        class: "CanalTP\SamEcoreSecurityBundle\Form\Type\Role\CopyRoleByApplicationType"
         arguments:
             - '@translator'
         tags:
-            - { name: form.type, alias: sam_copy_role_by_application }
+            - { name: form.type }

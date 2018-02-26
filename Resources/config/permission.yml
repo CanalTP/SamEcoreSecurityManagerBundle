@@ -1,11 +1,8 @@
-parameters:
-    sam_business_right.type.class: CanalTP\SamEcoreSecurityBundle\Form\Type\Permission\BusinessRightType
-
 services:
     sam_business_right.type:
-        class: %sam_business_right.type.class%
+        class: "CanalTP\\SamEcoreSecurityBundle\\Form\\Type\\Permission\\BusinessRightType"
         arguments:
            - '@sam.business_component'
            - @security.context
         tags:
-            - { name: form.type, alias: sam_business_right }
+            - { name: form.type }

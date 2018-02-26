@@ -2,12 +2,12 @@
 
 namespace CanalTP\SamEcoreSecurityBundle\Security\Authorization\Voter;
 
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class BusinessRightVoter implements VoterInterface
+class BusinessRightVoter extends Voter
 {
     private $prefix;
     private $om;
@@ -20,58 +20,48 @@ class BusinessRightVoter implements VoterInterface
         $this->appFinder = $appFinder;
     }
 
-    public function supportsAttribute($attribute)
+    public function supports($attribute, $subject)
     {
         return 0 === strpos($attribute, $this->prefix);
     }
 
-    public function supportsClass($class)
-    {
-        return true;
-    }
-
     private function checkPermission($attribute, $permissions)
     {
-        $result = false;
-        if ($permissions == NULL) {
-            return $result;
-            //throw new \Exception('One of your roles have no permissions');
+        if ($permissions == null) {
+            return false;
         }
 
         foreach ($permissions as $permission) {
             if ($attribute === $permission) {
-                $result = true;
-                break;
+                return true;
             }
         }
-        return $result;
+        return false;
     }
 
-    public function vote(TokenInterface $token, $object, array $attributes)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        $result = VoterInterface::ACCESS_ABSTAIN;
-
         if ($token->getUser() == 'anon.') {
-            return ($result);
+            return false;
         }
-        if (in_array('ROLE_API', $token->getUser()->getRoles())) {
-            return VoterInterface::ACCESS_GRANTED;
+
+        $user = $token->getUser();
+        if (in_array('ROLE_API', $user->getRoles())) {
+            return true;
         }
-        if ($token->getUser()->isSuperAdmin()) {
-            return VoterInterface::ACCESS_GRANTED;
+        if ($user->isSuperAdmin()) {
+            return true;
         }
 
         $roles = $this->extractRoles($token);
-        foreach ($attributes as $attribute) {
-            if (!$this->supportsAttribute($attribute)) {
-                continue;
-            }
+        if (!$this->supports($attribute, $subject)) {
+            return false;
+        }
 
-            $result = VoterInterface::ACCESS_DENIED;
-            foreach ($roles as $role) {
-                if ($this->checkPermission($attribute, $role->getPermissions())) {
-                    return VoterInterface::ACCESS_GRANTED;
-                }
+        $result = false;
+        foreach ($roles as $role) {
+            if ($this->checkPermission($attribute, $role->getPermissions())) {
+                return true;
             }
         }
 

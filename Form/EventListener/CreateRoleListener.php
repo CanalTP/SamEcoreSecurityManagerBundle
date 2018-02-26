@@ -10,7 +10,7 @@ namespace CanalTP\SamEcoreSecurityBundle\Form\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -21,6 +21,7 @@ use CanalTP\SamCoreBundle\Entity\Role;
 use CanalTP\SamCoreBundle\Entity\UserApplicationRole;
 use CanalTP\SamCoreBundle\Entity\Application;
 use CanalTP\SamCoreBundle\CanalTPSamCoreBundle;
+use CanalTP\SamEcoreSecurityBundle\Form\Type\Role\CopyRoleByApplicationType;
 
 class CreateRoleListener implements EventSubscriberInterface
 {
@@ -48,14 +49,18 @@ class CreateRoleListener implements EventSubscriberInterface
 
         $form->add(
             'applications',
-            'choice',
+            ChoiceType::class,
             array(
-                'label'       => 'role.field.application',
-                'multiple'    => true,
-                'expanded'    => true,
-                'required'    => false,
-                'choice_list' => new ObjectChoiceList($applications, 'name'),
-                'constraints' => array(new NotBlank())
+                'label'             => 'role.field.application',
+                'multiple'          => true,
+                'expanded'          => true,
+                'required'          => false,
+                'choices'           => $applications,
+                'choices_as_values' => true,
+                'choice_label' => function ($app, $key, $index) {
+                    return $app->getName();
+                },
+                'constraints'       => array(new NotBlank())
             )
         );
 
@@ -64,7 +69,7 @@ class CreateRoleListener implements EventSubscriberInterface
             'collection',
             array(
                 'label'        => 'role.field.parent.label',
-                'type'         => 'sam_copy_role_by_application',
+                'type'         => CopyRoleByApplicationType::class,
                 'allow_add'    => false,
                 'allow_delete' => false,
                 'by_reference' => false,

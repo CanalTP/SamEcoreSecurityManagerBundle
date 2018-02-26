@@ -6,7 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use CanalTP\SamEcoreSecurityBundle\Form\Type\Permission\BusinessRightType;
 
 class ApplicationRoleType extends AbstractType
 {
@@ -18,30 +19,22 @@ class ApplicationRoleType extends AbstractType
     {
         $builder->add('roles', 'collection',
             array(
-                'type' => 'sam_business_right',
+                'type' => BusinessRightType::class,
                 'options' => array('application' => $builder->getData()),
             )
         );
-        
+
         $builder->setAction($options['action']);
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'CanalTP\SamCoreBundle\Entity\Application',
             'attr' => array('novalidate' => 'novalidate')
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'sam_application_right';
     }
 }

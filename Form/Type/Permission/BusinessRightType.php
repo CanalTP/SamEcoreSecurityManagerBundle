@@ -3,11 +3,10 @@
 namespace CanalTP\SamEcoreSecurityBundle\Form\Type\Permission;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use CanalTP\SamEcoreApplicationManagerBundle\Component\BusinessComponentRegistry;
 use CanalTP\SamEcoreApplicationManagerBundle\Permission\BusinessPermission;
 
@@ -28,13 +27,12 @@ class BusinessRightType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        
         $permissions = $this->businessComponentRegistry
             ->getBusinessComponent($options['application']->getCanonicalName())
             ->getPermissionsManager()
             ->getBusinessModules()
             ->getPermissions();
-        
+
         $disabled = !$this->securityContext->isGranted('BUSINESS_MANAGE_PERMISSION');
 
         $builder->add(
@@ -46,19 +44,12 @@ class BusinessRightType extends AbstractType
                 'expanded'    => true,
                 'required'    => false,
                 'disabled'    => $disabled,
-                'choice_list' => new ObjectChoiceList($permissions, 'name', array(), null, 'id'),
-            )//,https://github.com/symfony/symfony/pull/10309
-//            array(
-//                'choices_attr' => function ($choice) {
-//                    debug($choice);die();
-//            
-//                    $attributes = array();
-//
-//                    $attributes['disabled'] = true;
-//
-//                    return $attributes;    
-//                }
-//            )
+                'choices' => $permissions,
+                'choices_as_values' => true,
+                'choice_label' => function ($permission, $key, $index) {
+                    return $permission->getName();
+                },
+            )
         );
 
         // Change Permissions in PermissionInterface[]
@@ -66,9 +57,6 @@ class BusinessRightType extends AbstractType
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($permissions) {
                 $data = $event->getData();
-//                if (!$data->getIsEditable()) {
-//                    return null;
-//                }
                 $permissionsArray = array();
                 foreach ($data->getPermissions() as $key => $permission) {
                     $model = new BusinessPermission();
@@ -100,22 +88,14 @@ class BusinessRightType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'CanalTP\SamCoreBundle\Entity\Role',
         ));
-        
-        $resolver->setRequired(array('application'));
-    }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'sam_business_right';
+        $resolver->setRequired(array('application'));
     }
 }

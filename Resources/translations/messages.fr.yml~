@@ -1,6 +1,0 @@
-message.notice.business_right.edit: 'Les permissions ont bien été sauvegardées.'
-ctp_core.delete.short: __ctp_core.delete.short
-ctp_core.cancel: __ctp_core.cancel
-ctp_core.edit.short: __ctp_core.edit.short
-ctp_core.add.short: __ctp_core.add.short
-sam.breadcrumb_role: Rôles

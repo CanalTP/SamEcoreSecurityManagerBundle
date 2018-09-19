@@ -1,22 +1,27 @@
-business_right.edit.title: 'Modification des permissions'
-business_right.edit.submit: Sauvegarder
-business_right.edit.column.permission.title: __business_right.edit.column.permission.title
-role.list.back: __role.list.back
-role.list.add: __role.list.add
-role.delete.title: __role.delete.title
-role.delete.confirm: __role.delete.confirm
-role.edit.title: __role.edit.title
-role.list.title: __role.list.title
-role.field.name: __role.field.name
-role.field.role: __role.field.role
-role.field.application: __role.field.application
-ctp_core.toggle_menu: __ctp_core.toggle_menu
-role.new.title: __role.new.title
+business_right:
+    edit:
+        title: 'Modification des permissions'
+        submit: Sauvegarder
+        column:
+            permission:
+                title: Permissions
+ctp_core:
+    toggle_menu: __ctp_core.toggle_menu
 role:
     list:
         add: Ajouter un rôle
         back: Annuler
+        title: __role.list.title
     edit:
         short: Editer
+        title: __role.edit.title
     delete:
         short: Supprimer
+        title: __role.delete.title
+        confirm: __role.delete.confirm
+    field:
+        name: __role.field.name
+        role: __role.field.role
+        application: __role.field.application
+    new:
+        title: __role.new.title

@@ -1,6 +1,6 @@
 <?php
 
-namespace CanalTP\SamEcoreSecurityBundle\Test;
+namespace CanalTP\SamEcoreSecurityManagerBundle\Test;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Tests\Authorization\Voter\RoleVoterTest;
